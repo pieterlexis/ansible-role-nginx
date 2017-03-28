@@ -4,11 +4,11 @@ After=network.target remote-fs.target nss-lookup.target
 
 [Service]
 Type=forking
-PIDFile=/run/openresty.pid
-# Nginx will fail to start if /run/openresty.pid already exists but has the wrong
+PIDFile="{{ nginx_pid_file }}"
+# Nginx will fail to start if {{ nginx_pid_file }} already exists but has the wrong
 # SELinux context. This might happen when running `nginx -t` from the cmdline.
 # https://bugzilla.redhat.com/show_bug.cgi?id=1268621
-ExecStartPre=/usr/bin/rm -f /run/nginx.pid
+ExecStartPre=/usr/bin/rm -f "{{ nginx_pid_file }}"
 ExecStartPre=/usr/local/openresty/nginx/sbin/nginx -t -c {{ nginx_conf_dir }}/nginx.conf
 ExecStart=/usr/local/openresty/nginx/sbin/nginx -c {{ nginx_conf_dir }}/nginx.conf
 #ExecReload=/usr/local/openresty/nginx/sbin/nginx -s reload -c {{ nginx_conf_dir }}/nginx.conf
